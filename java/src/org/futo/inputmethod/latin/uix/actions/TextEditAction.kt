@@ -394,9 +394,7 @@ val TextEditAction = Action(
                                 manager.activateAction(ArrowUpAction)
                             keyEventMetaState == 0 && direction == Direction.Down ->
                                 manager.activateAction(ArrowDownAction)
-                            
-                            manager.performHapticAndAudioFeedback(Constants.CODE_TAB, view)
-                            
+
                             direction == Direction.Left -> manager.cursorLeft(1, stepOverWords = ctrl, select = shift)
                             direction == Direction.Right -> manager.cursorRight(1, stepOverWords = ctrl, select = shift)
                             direction == Direction.Up -> manager.cursorUp(1, stepOverWords = ctrl, select = shift)
