@@ -584,7 +584,7 @@ class GeneralIME(val helper: IMEHelper) : IMEInterface, WordLearner, SuggestionS
         return false // GeneralIME does nothing
     }
 
-    override fun onMovePointer(steps: Int, stepOverWords: Boolean, select: Boolean?) {
+    override fun onMovePointer(stepsX: int, stepsY: int, stepOverWords: Boolean, select: Boolean?) {
         setNeutralSuggestionStrip()
 
         val shiftMode: Int = helper.keyboardShiftMode

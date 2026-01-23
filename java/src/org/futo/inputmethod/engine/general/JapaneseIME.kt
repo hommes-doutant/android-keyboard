@@ -1180,7 +1180,7 @@ class JapaneseIME(val helper: IMEHelper) : IMEInterface {
         return false
     }
 
-    override fun onMovePointer(steps: Int, stepOverWords: Boolean, select: Boolean?) {
+    override fun onMovePointer(stepsX: int, stepsY: int, stepOverWords: Boolean, select: Boolean?) {
 
     }
 
