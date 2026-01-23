@@ -601,9 +601,9 @@ class GeneralIME(val helper: IMEHelper) : IMEInterface, WordLearner, SuggestionS
             inputLogic.cursorRight(stepsX, stepOverWords, select)
         }
         if (stepsY < 0) {
-            inputLogic.cursorDown(stepsY, stepOverWords, select)
-        } else {
             inputLogic.cursorUp(stepsY, stepOverWords, select)
+        } else {
+            inputLogic.cursorDown(stepsY, stepOverWords, select)
         }
     }
 
