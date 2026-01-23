@@ -100,8 +100,7 @@ public interface KeyboardActionListener {
      * @return true if the request has been consumed, false otherwise.
      */
     public boolean onCustomRequest(int requestCode);
-
-    public void onMovePointer(int steps);
+    public void onMovePointer(int stepsX, int stepsY);
     public void onMoveDeletePointer(int steps);
     public void onUpWithDeletePointerActive();
     public void onUpWithPointerActive();
@@ -134,7 +133,7 @@ public interface KeyboardActionListener {
         @Override
         public boolean onCustomRequest(int requestCode) { return false; }
         @Override
-        public void onMovePointer(int steps) {}
+        public void onMovePointer(int stepsX, int stepsY) {}
         @Override
         public void onMoveDeletePointer(int steps) {}
         @Override
