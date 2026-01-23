@@ -69,7 +69,6 @@ import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
-import kotlin.math.abs
 
 /**
  * This class manages the input logic.
@@ -2767,7 +2766,7 @@ public final class InputLogic {
     }
 
 
-/**
+    /**
      * Shifts the cursor left by a number of characters
      * @param steps How many characters to step over, or the direction if stepOverWords
      * @param stepOverWords Whether to ignore the magnitude of steps and step over full words
@@ -2826,32 +2825,44 @@ public final class InputLogic {
     public void cursorUp(int steps, boolean stepOverWords, boolean select) {
         final SettingsValues settingsValues = Settings.getInstance().getCurrent();
         steps = Math.abs(steps);
-        // Vertical movement generally relies solely on key events, without complex internal logic.
-        // The R.id.more_key_shift_up/down functions should already handle this.
-        mConnection.finishComposingText();
-        int meta = 0;
-        if(stepOverWords) meta = meta | KeyEvent.META_CTRL_ON;
-        if(select) meta = meta | KeyEvent.META_SHIFT_ON;
+        if(!mConnection.hasCursorPosition() || settingsValues.mInputAttributes.mIsCodeField) {
+            mConnection.finishComposingText();
+            int meta = 0;
+            if(stepOverWords) meta = meta | KeyEvent.META_CTRL_ON;
+            if(select) meta = meta | KeyEvent.META_SHIFT_ON;
 
-        mConnection.beginBatchEdit();
-        for(int i=0; i<steps; i++)
-            sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_UP, meta);
-        mConnection.endBatchEdit();
+            mConnection.beginBatchEdit();
+            for(int i=0; i<steps; i++)
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT, meta);
+            mConnection.endBatchEdit();
+        } else {
+            if(settingsValues.mIsRTL) {
+                cursorLeftInternal(steps, stepOverWords, select);
+            } else {
+                cursorRightInternal(steps, stepOverWords, select);
+            }
+        }
     }
     
     public void cursorDown(int steps, boolean stepOverWords, boolean select) {
         final SettingsValues settingsValues = Settings.getInstance().getCurrent();
         steps = Math.abs(steps);
-        // Vertical movement generally relies solely on key events, without complex internal logic.
-        // The R.id.more_key_shift_up/down functions should already handle this.
-        mConnection.finishComposingText();
-        int meta = 0;
-        if(stepOverWords) meta = meta | KeyEvent.META_CTRL_ON;
-        if(select) meta = meta | KeyEvent.META_SHIFT_ON;
+        if(!mConnection.hasCursorPosition() || settingsValues.mInputAttributes.mIsCodeField) {
+            mConnection.finishComposingText();
+            int meta = 0;
+            if(stepOverWords) meta = meta | KeyEvent.META_CTRL_ON;
+            if(select) meta = meta | KeyEvent.META_SHIFT_ON;
 
-        mConnection.beginBatchEdit();
-        for(int i=0; i<steps; i++)
-            sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_DOWN, meta);
-        mConnection.endBatchEdit();
+            mConnection.beginBatchEdit();
+            for(int i=0; i<steps; i++)
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT, meta);
+            mConnection.endBatchEdit();
+        } else {
+            if(settingsValues.mIsRTL) {
+                cursorLeftInternal(steps, stepOverWords, select);
+            } else {
+                cursorRightInternal(steps, stepOverWords, select);
+            }
+        }
     }
 }
