@@ -425,6 +425,20 @@ class UixActionKeyboardManager(val uixManager: UixManager, val latinIME: LatinIM
         ).onMovePointer( 1, -1, stepOverWords, select)
         //latinIME.inputLogic.cursorRight(steps, stepOverWords, select)
     }
+    
+        override fun cursorUp(steps: Int, stepOverWords: Boolean, select: Boolean) {
+        latinIME.imeManager.getActiveIME(
+            Settings.getInstance().current
+        ).onMovePointer( 1, -1, stepOverWords, select)
+        //latinIME.inputLogic.cursorRight(steps, stepOverWords, select)
+    }
+    
+        override fun cursorDown(steps: Int, stepOverWords: Boolean, select: Boolean) {
+        latinIME.imeManager.getActiveIME(
+            Settings.getInstance().current
+        ).onMovePointer( 1, -1, stepOverWords, select)
+        //latinIME.inputLogic.cursorRight(steps, stepOverWords, select)
+    }
 
     override fun performHapticAndAudioFeedback(code: Int, view: View) {
         AudioAndHapticFeedbackManager.getInstance().performHapticAndAudioFeedback(code, view)

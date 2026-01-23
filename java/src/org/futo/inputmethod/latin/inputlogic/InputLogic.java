@@ -2748,6 +2748,22 @@ public final class InputLogic {
 
         cursorStep(steps, stepOverWords, select);
     }
+    
+     private void cursorUpInternal(int steps, boolean stepOverWords, boolean select) {
+        finishInput();
+
+        if(!mConnection.hasSelection()) isRightSidePointer = false;
+
+        cursorStep(steps, stepOverWords, select);
+    }
+    
+    private void cursorDownInternal(int steps, boolean stepOverWords, boolean select) {
+        finishInput();
+
+        if(!mConnection.hasSelection()) isRightSidePointer = false;
+
+        cursorStep(steps, stepOverWords, select);
+    }
 
 
     /**
@@ -2785,6 +2801,50 @@ public final class InputLogic {
      * @param select Whether or not to start/continue selection
      */
     public void cursorRight(int steps, boolean stepOverWords, boolean select) {
+        final SettingsValues settingsValues = Settings.getInstance().getCurrent();
+        steps = Math.abs(steps);
+        if(!mConnection.hasCursorPosition() || settingsValues.mInputAttributes.mIsCodeField) {
+            mConnection.finishComposingText();
+            int meta = 0;
+            if(stepOverWords) meta = meta | KeyEvent.META_CTRL_ON;
+            if(select) meta = meta | KeyEvent.META_SHIFT_ON;
+
+            mConnection.beginBatchEdit();
+            for(int i=0; i<steps; i++)
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT, meta);
+            mConnection.endBatchEdit();
+        } else {
+            if(settingsValues.mIsRTL) {
+                cursorLeftInternal(steps, stepOverWords, select);
+            } else {
+                cursorRightInternal(steps, stepOverWords, select);
+            }
+        }
+    }
+    
+    public void cursorUp(int steps, boolean stepOverWords, boolean select) {
+        final SettingsValues settingsValues = Settings.getInstance().getCurrent();
+        steps = Math.abs(steps);
+        if(!mConnection.hasCursorPosition() || settingsValues.mInputAttributes.mIsCodeField) {
+            mConnection.finishComposingText();
+            int meta = 0;
+            if(stepOverWords) meta = meta | KeyEvent.META_CTRL_ON;
+            if(select) meta = meta | KeyEvent.META_SHIFT_ON;
+
+            mConnection.beginBatchEdit();
+            for(int i=0; i<steps; i++)
+                sendDownUpKeyEvent(KeyEvent.KEYCODE_DPAD_RIGHT, meta);
+            mConnection.endBatchEdit();
+        } else {
+            if(settingsValues.mIsRTL) {
+                cursorLeftInternal(steps, stepOverWords, select);
+            } else {
+                cursorRightInternal(steps, stepOverWords, select);
+            }
+        }
+    }
+    
+        public void cursorDown(int steps, boolean stepOverWords, boolean select) {
         final SettingsValues settingsValues = Settings.getInstance().getCurrent();
         steps = Math.abs(steps);
         if(!mConnection.hasCursorPosition() || settingsValues.mInputAttributes.mIsCodeField) {
