@@ -415,14 +415,14 @@ class UixActionKeyboardManager(val uixManager: UixManager, val latinIME: LatinIM
     override fun cursorLeft(steps: Int, stepOverWords: Boolean, select: Boolean) {
         latinIME.imeManager.getActiveIME(
             Settings.getInstance().current
-        ).onMovePointer(-1, stepOverWords, select)
+        ).onMovePointer(-1, -1, stepOverWords, select)
         //latinIME.inputLogic.cursorLeft(steps, stepOverWords, select)
     }
 
     override fun cursorRight(steps: Int, stepOverWords: Boolean, select: Boolean) {
         latinIME.imeManager.getActiveIME(
             Settings.getInstance().current
-        ).onMovePointer( 1, stepOverWords, select)
+        ).onMovePointer( 1, -1, stepOverWords, select)
         //latinIME.inputLogic.cursorRight(steps, stepOverWords, select)
     }
 
