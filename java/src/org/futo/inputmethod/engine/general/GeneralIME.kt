@@ -584,29 +584,26 @@ class GeneralIME(val helper: IMEHelper) : IMEInterface, WordLearner, SuggestionS
         return false // GeneralIME does nothing
     }
 
-    override fun onMoveCursor(stepsX: Int, stepsY: Int) {
-        if (stepsX > 0) {
-            val actionId = ArrowRightAction.keyCode - Constants.CODE_ACTION_0
-            repeat(stepsX) {
-                helper.triggerAction(actionId, false)
-            }
-        } else if (stepsX < 0) {
-            val actionId = ArrowLeftAction.keyCode - Constants.CODE_ACTION_0
-            repeat(abs(stepsX)) {
-                helper.triggerAction(actionId, false)
-            }
+    override fun onMovePointer(stepsX: Int, stepsY: Int, stepOverWords: Boolean, select: Boolean?) {
+        setNeutralSuggestionStrip()
+
+        val shiftMode: Int = helper.keyboardShiftMode
+        val select = select
+            ?: ((shiftMode == WordComposer.CAPS_MODE_MANUAL_SHIFTED) || (shiftMode == WordComposer.CAPS_MODE_MANUAL_SHIFT_LOCKED))
+
+        if (select) {
+            inputLogic.disableRecapitalization()
         }
 
-        if (stepsY > 0) {
-            val actionId = ArrowDownAction.keyCode - Constants.CODE_ACTION_0
-            repeat(stepsY) {
-                helper.triggerAction(actionId, false)
-            }
-        } else if (stepsY < 0) {
-            val actionId = ArrowUpAction.keyCode - Constants.CODE_ACTION_0
-            repeat(abs(stepsY)) {
-                helper.triggerAction(actionId, false)
-            }
+        if (stepsX < 0) {
+            inputLogic.cursorLeft(stepsX, stepOverWords, select)
+        } else {
+            inputLogic.cursorRight(stepsX, stepOverWords, select)
+        }
+        if (stepsY < 0) {
+            inputLogic.cursorUp(stepsY, stepOverWords, select)
+        } else {
+            inputLogic.cursorDown(stepsY, stepOverWords, select)
         }
     }
 
