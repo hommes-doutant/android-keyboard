@@ -104,7 +104,8 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
 
     private static final ArrayList<PointerTracker> sTrackers = new ArrayList<>();
     private static final PointerTrackerQueue sPointerTrackerQueue = new PointerTrackerQueue();
-
+    private static final int sVerticalPointerStep = (int)(20.0 * Resources.getSystem().getDisplayMetrics().density);
+ 
     public final int mPointerId;
 
     private static DrawingProxy sDrawingProxy;
@@ -960,16 +961,21 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
                 pointerStep = sPointerHugeStep;
             }
 
-            int steps = (x - mStartX) / pointerStep;
+            final int stepsX = (x - mStartX) / pointerStep;
+            final int stepsY = (y - mStartY) / pointerStep; // Calculate vertical steps
             final int swipeIgnoreTime = settingsValues.mKeyLongpressTimeout / MULTIPLIER_FOR_LONG_PRESS_TIMEOUT_IN_SLIDING_INPUT;
-            if (steps != 0 && mStartTime + swipeIgnoreTime < System.currentTimeMillis()) {
+            if ((stepsX != 0 || stepsY != 0) && mStartTime + swipeIgnoreTime < System.currentTimeMillis()) {
                 mCursorMoved = true;
-                mStartX += steps * pointerStep;
+                mStartX += stepsX * pointerStep;
+                mStartY += stepsY * pointerStep; // Update mStartY
 
                 if(settingsValues.mSpacebarMode == Settings.SPACEBAR_MODE_SWIPE_LANGUAGE && !mSpacebarLongPressed) {
-                    sListener.onSwipeLanguage(steps);
+                    // Only swipe language on horizontal movement
+                    if(stepsX != 0) {
+                        sListener.onSwipeLanguage(stepsX);
+                    }
                 } else {
-                    sListener.onMovePointer(steps);
+                    sListener.onMovePointer(stepsX, stepsY); // Pass both X and Y steps
                 }
             }
 
