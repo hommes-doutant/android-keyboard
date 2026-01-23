@@ -584,7 +584,7 @@ class GeneralIME(val helper: IMEHelper) : IMEInterface, WordLearner, SuggestionS
         return false // GeneralIME does nothing
     }
 
-    override fun onMovePointer(stepsX: int, stepsY: int, stepOverWords: Boolean, select: Boolean?) {
+    override fun onMovePointer(stepsX: Int, stepsY: Int, stepOverWords: Boolean, select: Boolean?) {
         setNeutralSuggestionStrip()
 
         val shiftMode: Int = helper.keyboardShiftMode
@@ -595,10 +595,15 @@ class GeneralIME(val helper: IMEHelper) : IMEInterface, WordLearner, SuggestionS
             inputLogic.disableRecapitalization()
         }
 
-        if (steps < 0) {
-            inputLogic.cursorLeft(steps, stepOverWords, select)
+        if (stepsX < 0) {
+            inputLogic.cursorLeft(stepsX, stepOverWords, select)
         } else {
-            inputLogic.cursorRight(steps, stepOverWords, select)
+            inputLogic.cursorRight(stepsX, stepOverWords, select)
+        }
+        if (stepsY < 0) {
+            inputLogic.cursorDown(stepsY, stepOverWords, select)
+        } else {
+            inputLogic.cursorUp(stepsY, stepOverWords, select)
         }
     }
 

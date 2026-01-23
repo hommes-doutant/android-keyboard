@@ -65,7 +65,7 @@ interface IMEInterface {
      */
     fun onCustomRequest(requestCode: Int): Boolean
 
-    fun onMovePointer(stepsX: int, stepsY: int, stepOverWords: Boolean, select: Boolean?)
+    fun onMovePointer(stepsX: Int, stepsY: Int, stepOverWords: Boolean, select: Boolean?)
     fun onMoveDeletePointer(steps: Int)
     fun onUpWithDeletePointerActive()
     fun onUpWithPointerActive()
