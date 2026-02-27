@@ -19,6 +19,8 @@ package org.futo.inputmethod.latin;
 import static org.futo.inputmethod.latin.common.Constants.ImeOption.FORCE_ASCII;
 import static org.futo.inputmethod.latin.common.Constants.ImeOption.NO_MICROPHONE;
 import static org.futo.inputmethod.latin.common.Constants.ImeOption.NO_MICROPHONE_COMPAT;
+import android.view.HapticFeedbackConstants;
+import android.os.Build;
 
 import android.Manifest.permission;
 import android.app.Activity;
@@ -617,9 +619,17 @@ public class LatinIMELegacy implements KeyboardActionListener,
 
     @Override
     public void onMovePointer(int stepsX, int stepsY) {
-        mImeManager.getActiveIME(
-                mSettings.getCurrent()
-        ).onMovePointer(stepsX, stepsY, false, null);
+        if (stepsX != 0 || stepsY != 0) {
+            AudioAndHapticFeedbackManager.getInstance().performHapticFeedback(
+                    mKeyboardSwitcher.getMainKeyboardView(),
+                    true
+            );
+
+            IMEInterface activeIme = mImeManager.getActiveIME(mSettings.getCurrent());
+            if (activeIme != null) {
+                activeIme.onMovePointer(stepsX, stepsY, false, null);
+            }
+        }
     }
 
     @Override
