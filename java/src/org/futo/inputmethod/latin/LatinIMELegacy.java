@@ -634,6 +634,12 @@ public class LatinIMELegacy implements KeyboardActionListener,
 
     @Override
     public void onMoveDeletePointer(int steps) {
+    if(steps !=0){
+                AudioAndHapticFeedbackManager.getInstance().performHapticFeedback(
+                    mKeyboardSwitcher.getMainKeyboardView(),
+                    true
+            );
+       }
         mImeManager.getActiveIME(
                 mSettings.getCurrent()
         ).onMoveDeletePointer(steps);
