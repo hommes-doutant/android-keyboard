@@ -94,6 +94,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
             (int)(128.0 * Resources.getSystem().getDisplayMetrics().density),
             Resources.getSystem().getDisplayMetrics().widthPixels * 3 / 2
     );
+    private static int sSlidingCursorThreshold;
 
     private static GestureStrokeRecognitionParams sGestureStrokeRecognitionParams;
     private static GestureStrokeDrawingParams sGestureStrokeDrawingParams;
@@ -191,6 +192,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
                 ResourceUtils.getDeviceOverrideValue(res,
                         R.array.phantom_sudden_move_event_device_list, Boolean.FALSE.toString()));
         BogusMoveEventDetector.init(res);
+        sSlidingCursorThreshold = (int) (18.0f * res.getDisplayMetrics().density);
 
         sTimerProxy = timerProxy;
         sDrawingProxy = drawingProxy;
@@ -966,8 +968,8 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
             final int swipeIgnoreTime = settingsValues.mKeyLongpressTimeout / MULTIPLIER_FOR_LONG_PRESS_TIMEOUT_IN_SLIDING_INPUT;
             if ((stepsX != 0 || stepsY != 0) && mStartTime + swipeIgnoreTime < System.currentTimeMillis()) {
                 mCursorMoved = true;
-                mStartX += stepsX * pointerStep;
-                mStartY += stepsY * pointerStep; // Update mStartY
+                mStartX = lastX;
+                mStartY = lastY; // Update mStartY
 
                 if(settingsValues.mSpacebarMode == Settings.SPACEBAR_MODE_SWIPE_LANGUAGE && !mSpacebarLongPressed) {
                     // Only swipe language on horizontal movement
@@ -975,7 +977,7 @@ public final class PointerTracker implements PointerTrackerQueue.Element,
                         sListener.onSwipeLanguage(stepsX);
                     }
                 } else {
-                    sListener.onMovePointer(stepsX, stepsY); // Pass both X and Y steps
+                    sListener.onMovePointer(stepsX, stepsY);
                 }
             }
 
